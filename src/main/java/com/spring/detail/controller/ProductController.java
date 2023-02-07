@@ -3,6 +3,9 @@ package com.spring.detail.controller;
 import com.spring.detail.entity.ProductEntity;
 import com.spring.detail.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +23,10 @@ public class ProductController {
     ProductRepository productRepository;
 
     @RequestMapping(method = GET)
-    public String showProducts(Model model) {
-        List<ProductEntity> productList = (List<ProductEntity>) productRepository.findAll();
+    public String showProducts(Model model, @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "3") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductEntity> productList = (Page<ProductEntity>) productRepository.findAll(pageable);
         model.addAttribute("productList", productList);
         return "productList";
     }
@@ -43,21 +48,6 @@ public class ProductController {
         return "productList";
     }
 
-//    @RequestMapping(value = "/newProduct", method = GET)
-//    public String showNewBook(Model model) {
-//        model.addAttribute("product", new ProductEntity());
-//        model.addAttribute("msg", "Add a new product");
-//        model.addAttribute("action", "newProduct");
-//        model.addAttribute("type", "newProducts");
-//        return "product";
-//    }
-//
-//    @RequestMapping(value = "/newProduct", method = POST, produces = "text/plain;charset=UTF-8")
-//    public String saveProduct(ProductEntity product) {
-//        productRepository.save(product);
-//        System.out.println("Success");
-//        return "redirect:/";
-//    }
 
     @RequestMapping(value = "/newProducts", method = POST, produces = "text/plain;charset=UTF-8")
     public String saveProducts(ProductEntity product, RedirectAttributes redirectAttributes) {
