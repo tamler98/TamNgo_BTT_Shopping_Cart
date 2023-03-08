@@ -18,6 +18,8 @@ public interface OrderDetailRepository extends PagingAndSortingRepository<OrderD
     OrderDetailsEntity getOrderDetailByProductId(int id);
 //    Page<OrderDetailsEntity> findAll(Pageable pageable);
 
+    // test
+
     @Query(value = "SELECT * FROM orderdetail where orderId = ?1 LIMIT 10 OFFSET ?2",nativeQuery = true)
     List<OrderDetailsEntity> getOrderDetailByPage(int orderId,int pageOut);
     }
